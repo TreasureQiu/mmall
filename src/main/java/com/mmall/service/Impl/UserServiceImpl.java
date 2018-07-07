@@ -1,6 +1,6 @@
 package com.mmall.service.Impl;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
+
 import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
 import com.mmall.common.TokenCache;
@@ -8,7 +8,6 @@ import com.mmall.dao.UserMapper;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
 import com.mmall.util.MD5Util;
-import net.sf.jsqlparser.schema.Server;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ import java.util.UUID;
 
 
 /**
- * Created by 疯子 on 2018/7/4.
+ * Created  on 2018/7/4.
  */
 @Service("iUserService")
 public class UserServiceImpl implements IUserService {
@@ -122,7 +121,7 @@ public class UserServiceImpl implements IUserService {
         }
         String token=TokenCache.getKey(TokenCache.TOKEN_PREFIX+username);
         if(StringUtils.isBlank(token)){
-            return ServerResponse.createByErrorMessage("toekn无效或者过期");
+            return ServerResponse.createByErrorMessage("token无效或者过期");
         }
 
         if (StringUtils.equals(forgetToken,token)){
@@ -154,7 +153,7 @@ public class UserServiceImpl implements IUserService {
 
     }
 
-    public ServerResponse<User> update_Information(User user){
+    public ServerResponse<User> updateInformation(User user){
         //username是不能被更新的
         //email也要进行一个校验，校验新的email是不是已经存在，并且存在的email如果相同的话，不能是我们当前的这个用户
         int resultCount=userMapper.checkEmailByUserId(user.getEmail(),user.getId());
