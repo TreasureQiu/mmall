@@ -17,6 +17,9 @@ public class PropertiesUtil {
 
     private static Properties props;
 
+    //静态代码块优于普通代码块优于构造代码块
+    //构造代码块每次都执行，但静态代码块只会执行一次，一般用作初始化的静态变量
+
     static {
         String fileName = "mmall.properties";
         props = new Properties();

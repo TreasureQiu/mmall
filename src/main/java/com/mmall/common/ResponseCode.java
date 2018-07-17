@@ -1,7 +1,7 @@
 package com.mmall.common;
 
 /**
- * Created by 疯子 on 2018/7/4.
+ * Created  on 2018/7/4.
  */
 public enum ResponseCode {
     SUCCESS(0,"SUCCESS"),

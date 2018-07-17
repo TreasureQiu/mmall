@@ -8,6 +8,7 @@ import com.mmall.dao.UserMapper;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
 import com.mmall.util.MD5Util;
+import net.sf.jsqlparser.schema.Server;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -110,6 +111,9 @@ public class UserServiceImpl implements IUserService {
         return ServerResponse.createByErrorMessage("问题的答案错误");
     }
 
+
+
+
     public ServerResponse<String> forgetResetPassword(String username,String passwordNew,String forgetToken){
         if(StringUtils.isBlank(forgetToken)){
             return  ServerResponse.createByErrorMessage("参数错误，token需要传递");
@@ -126,7 +130,7 @@ public class UserServiceImpl implements IUserService {
 
         if (StringUtils.equals(forgetToken,token)){
             String md5Password=MD5Util.MD5EncodeUtf8(passwordNew);
-            int rowCount=userMapper.updatePasswordByUsename(username,md5Password);
+            int rowCount=userMapper.updatePasswordByUsername(username,md5Password);
 
             if (rowCount>0){
                 return ServerResponse.createBySuccessMessage("修改密码成功");
@@ -172,7 +176,23 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createBySuccess("更新个人信息成功",updateUser);
         }
         return ServerResponse.createByErrorMessage("更新个人信息失败");
-
-
     }
+    public ServerResponse<User> getInformation(Integer userId){
+        User user=userMapper.selectByPrimaryKey(userId);
+        if (user==null){
+            return ServerResponse.createByErrorMessage("找不到当前用户");
+        }
+        user.setPassword(StringUtils.EMPTY);
+        return ServerResponse.createBySuccess(user);
+    }
+
+    //backend
+    public ServerResponse checkAdminRole(User user){
+        if(user != null && user.getRole().intValue() == Const.Role.ROLE_ADMIN){
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByError();
+    }
+
+
 }
